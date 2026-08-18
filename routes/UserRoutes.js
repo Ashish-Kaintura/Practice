@@ -1,7 +1,9 @@
 const { Router } = require('express')
 const router = Router()
 const User = require("../models/User")
-const { registerUser, getAllUsers, deleteUser, getUserById } = require('../controller/UserControler')
+const { registerUser, getAllUsers, deleteUser, getUserById, logingUser } = require('../controller/UserControler')
+const RoleMiddleware = require('../middleware/role')
+const { Protect } = require('../middleware/auth')
 
 // router.get("/", async (req, res) => {
 //     const users = await User.find()
@@ -17,5 +19,6 @@ router.get("/", getAllUsers)
 router.get("/:id", getUserById)
 
 router.post("/register", registerUser)
-router.delete("/delete/:id", deleteUser)
+router.post("/login", logingUser)
+router.delete("/delete/:id", Protect, RoleMiddleware, deleteUser)
 module.exports = router 

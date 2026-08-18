@@ -1,5 +1,5 @@
 // controller /UserControler.js
-
+const jwt = require("jsonwebtoken")
 const User = require("../models/User")
 
 // Get all users
@@ -7,9 +7,36 @@ const getAllUsers = async (req, res) => {
     try {
         const users = await User.find()
         res.status(200).json(users)
-    } catch (error) {
+    } catch (error) {   
         res.status(500).json({ error: error.message })
     }
+}
+const logingUser = async (req, res) => {
+    try {
+        const { email, password } = req.body
+        const user = await User.findOne({ email, password })
+        if (!user) {
+            return res.status(404).json({ message: "User not found" })
+        }
+        const token = jwt.sign(
+            {
+                id: user._id,
+                role: user.role
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: "1d"
+            }
+        )
+
+        res.status(200).json({ user, message: "User logged in successfully", token })
+
+    }
+    catch (error) {
+        res.status(500).json({ message: "Error occurred while logging in" })
+    }
+
+
 }
 // get userby id
 const getUserById = async (req, res) => {
@@ -23,8 +50,8 @@ const getUserById = async (req, res) => {
 }
 const registerUser = async (req, res) => {
     try {
-        const { name, email, password, phone } = req.body
-        const user = await User.create({ name, email, password, phone })
+        const { name, email, role, password, phone, } = req.body
+        const user = await User.create({ name, email, role, password, phone, })
         res.status(201).json({ user, message: "user register successful" })
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -44,5 +71,5 @@ module.exports = {
     getAllUsers,
     getUserById,
     registerUser,
-    deleteUser
+    deleteUser, logingUser
 }

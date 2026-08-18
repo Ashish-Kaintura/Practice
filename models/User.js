@@ -10,6 +10,12 @@ const UserSchema = new Mongoose.Schema(
             type: String,
             required: true,
             unique: true,
+            index: true
+        },
+        role: {
+            type: String,
+            enum: ['user', 'admin'],
+            default: 'user'
         },
         phone: {
             type: String,
