@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const router = Router()
 const User = require("../models/User")
-const { registerUser, getAllUsers, deleteUser, getUserById, logingUser } = require('../controller/UserControler')
+const { registerUser, getAllUsers, deleteUser, getUserById, logingUser, updateUser,patchUser } = require('../controller/UserControler')
 const RoleMiddleware = require('../middleware/role')
 const { Protect } = require('../middleware/auth')
 
@@ -20,5 +20,6 @@ router.get("/:id", getUserById)
 router.post("/register", registerUser)
 router.post("/login", logingUser)
 router.delete("/delete/:id", Protect, RoleMiddleware, deleteUser)
-router.put("/update/:id", Protect, RoleMiddleware, deleteUser)
+router.put("/update/:id", Protect, RoleMiddleware, updateUser)
+router.patch("/patch/:id", Protect, RoleMiddleware, patchUser)
 module.exports = router 

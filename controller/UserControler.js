@@ -75,11 +75,21 @@ const updateUser = async (req, res) => {
         res.status(500).json({ error: error.message })
     }
 }
+const patchUser = async (req, res) => {
+    try {
+        const { id } = req.params
+        const user = await User.findByIdAndUpdate(id, req.body, { new: true })
+        res.status(200).json({ user, message: "user updated successful" })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
 
 module.exports = {
     getAllUsers,
     getUserById,
     registerUser,
     deleteUser, logingUser,
-    updateUser
+    updateUser,
+    patchUser
 }
