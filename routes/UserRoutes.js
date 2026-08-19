@@ -17,8 +17,8 @@ const { Protect } = require('../middleware/auth')
 // })
 router.get("/", getAllUsers)
 router.get("/:id", getUserById)
-
 router.post("/register", registerUser)
 router.post("/login", logingUser)
 router.delete("/delete/:id", Protect, RoleMiddleware, deleteUser)
+router.put("/update/:id", Protect, RoleMiddleware, deleteUser)
 module.exports = router 
