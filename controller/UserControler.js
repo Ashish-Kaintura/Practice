@@ -7,7 +7,7 @@ const getAllUsers = async (req, res) => {
     try {
         const users = await User.find()
         res.status(200).json(users)
-    } catch (error) {   
+    } catch (error) {
         res.status(500).json({ error: error.message })
     }
 }
@@ -85,11 +85,29 @@ const patchUser = async (req, res) => {
     }
 }
 
+const searchUser = async (req, res) => {
+    try {
+        const { name } = req.query
+
+        const users = await User.find({
+            name: { $regex: name, $options: "i" }
+        })
+
+        res.status(200).json(users)
+
+    } catch (error) {
+        res.status(500).json({
+            error: error.message
+        })
+    }
+}
+
 module.exports = {
     getAllUsers,
     getUserById,
     registerUser,
     deleteUser, logingUser,
     updateUser,
-    patchUser
+    patchUser,
+    searchUser
 }

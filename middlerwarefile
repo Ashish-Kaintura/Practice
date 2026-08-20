@@ -1,0 +1,104 @@
+1. Create middleware/asyncHandler.js
+const asyncHandler = (fn) => {
+    return (req, res, next) => {
+        Promise.resolve(fn(req, res, next)).catch(next)
+    }
+}
+
+module.exports = asyncHandler
+
+2. Create global error middleware
+middleware/errorHandler.js
+
+const errorHandler = (err, req, res, next) => {
+    console.error(err)
+
+    const statusCode = err.statusCode || 500
+
+    res.status(statusCode).json({
+        success: false,
+        message: err.message || "Internal Server Error"
+    })
+}
+
+module.exports = errorHandler
+
+3. Your controller becomes much cleaner
+For example:
+
+const jwt = require("jsonwebtoken")
+const User = require("../models/User")
+const asyncHandler = require("../middleware/asyncHandler")
+
+const getAllUsers = asyncHandler(async (req, res) => {
+    const users = await User.find()
+
+    res.status(200).json(users)
+})
+
+const getUserById = asyncHandler(async (req, res) => {
+    const { id } = req.params
+
+    const user = await User.findById(id)
+
+    if (!user) {
+        const error = new Error("User not found")
+        error.statusCode = 404
+        throw error
+    }
+
+    res.status(200).json(user)
+})
+
+const registerUser = asyncHandler(async (req, res) => {
+    const { name, email, role, password, phone } = req.body
+
+    const user = await User.create({
+        name,
+        email,
+        role,
+        password,
+        phone
+    })
+
+    res.status(201).json({
+        user,
+        message: "User registered successfully"
+    })
+})
+
+No try/catch needed.
+
+Then in your main app.js:
+
+const express = require("express")
+const errorHandler = require("./middleware/errorHandler")
+
+const app = express()
+
+app.use(express.json())
+
+// routes
+app.use("/api/users", userRoutes)
+
+// MUST BE LAST
+app.use(errorHandler)
+
+module.exports = app
+
+So your flow becomes
+Request
+   ↓
+Route
+   ↓
+Controller
+   ↓
+Error?
+   ↓
+asyncHandler catches it
+   ↓
+next(error)
+   ↓
+errorHandler
+   ↓
+JSON response
