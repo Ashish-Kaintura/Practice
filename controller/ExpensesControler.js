@@ -1,12 +1,12 @@
 const jwt = require("jsonwebtoken")
-const Expences = require("../models/expence")
+const Expenses = require("../models/expense")
 
 
-const postExpences = async (req, res) => {
+const postExpenses = async (req, res) => {
     try {
         const { title, amount, date, category, type, description } = req.body;
 
-        const newexpence = await Expences.create({
+        const newexpense = await Expenses.create({
             title,
             amount,
             date,
@@ -17,7 +17,7 @@ const postExpences = async (req, res) => {
         });
 
         res.status(201).json({
-            newexpence,
+            newexpense,
             message: "Expense has been added"
         });
 
@@ -28,10 +28,10 @@ const postExpences = async (req, res) => {
     }
 };
 
-const getExpences = async (req, res) => {
+const getExpenses = async (req, res) => {
     try {
-        const expences = await Expences.find()
-        res.status(200).json(expences)
+        const expenses = await Expenses.find()
+        res.status(200).json(expenses)
 
     }
     catch (error) {
@@ -41,6 +41,6 @@ const getExpences = async (req, res) => {
 
 
 module.exports = {
-    getExpences,
-    postExpences
+    getExpenses,
+    postExpenses
 }
