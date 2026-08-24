@@ -5,8 +5,6 @@ const { getExpenses, postExpenses, getExpensesall, getExpenseById, getExpenseSum
 const RoleMiddleware = require('../middleware/role')
 const { Protect } = require('../middleware/auth')
 
-// Ashish kaintura 
-
 router.get("/", Protect, getExpenses);
 
 router.get("/all", Protect, getExpensesall);
