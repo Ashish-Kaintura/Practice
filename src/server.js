@@ -1,6 +1,7 @@
 const express = require('express');
 const userRoutes = require("../routes/UserRoutes")
 const ExpenseRoutes = require("../routes/ExpencseRoutes")
+const FormRoutes = require("../routes/FormRoute")
 const connectDb = require("../config/db")
 const app = express()
 
@@ -15,6 +16,7 @@ app.get('/', (req, res) => {
 
 app.use("/api/user", userRoutes)
 app.use("/api/expenses", ExpenseRoutes)
+app.use("/api/fromdata", FormRoutes)
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
