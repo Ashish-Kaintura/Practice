@@ -39,6 +39,7 @@ const getExpensesall = async (req, res) => {
         res.status(500).json({ error: error.message })
     }
 }
+
 // get exp as per user 
 const getExpenses = async (req, res) => {
     try {
@@ -167,5 +168,6 @@ module.exports = {
     getExpensesall,
     postExpenses,
     getExpenseById,
-    getExpenseSummary
+    getExpenseSummary,
+    deleteExpense
 }
