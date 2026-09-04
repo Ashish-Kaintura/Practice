@@ -9,7 +9,7 @@ router.get("/", Protect, getExpenses);
 
 router.get("/all", Protect, getExpensesall);
 
-router.post("/", Protect, RoleMiddleware, postExpenses);
+router.post("/", Protect, postExpenses);
 
 router.get("/summary", Protect, getExpenseSummary);
 
